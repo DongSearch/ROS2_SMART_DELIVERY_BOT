@@ -1,0 +1,21 @@
+1. There are two ways to express angle
+
+- Euler(roll,pitch,yaw) -> human friendly
+- Quaternion -> Computation friendly
+
+the biggest problem of Euler has Gimbal lock, which makes differnt two axis turn samely at the certain angle. also turning order engages different results
+so, using quaternion way is more robust,which has 4 elements (x,y,z) and w(angle size)
+
+
+2. math.atan() vs math.atan2()
+atan takes ratio(y/x), and output values in range(-n/2,n/2), while atan2 takes (y,x) coordinates and output in range(-n,n).
+ex) (1,1), (-1,-1) they have same angle in atan, because their ratio are same
+
+atan2() calculate theta without doing division and use CORDIC(rotate vector)
+https://m.blog.naver.com/nwc1718/221760124410
+
+3. LASERSCAN avoid algorithm
+avoid detecting only front, we should seperate at least left and right for deciding which direction the robot should turn
+
+4. service spin or spin_once?
+Before that , I was thinking that service call request only once, so spin_once was reasonable choice but to get reponse, they need to check regularly using spin 

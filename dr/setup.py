@@ -24,6 +24,10 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            "moveto=dr.action_moveto:main",
+            "robot=dr.robot:main",
+            "emg=dr.srv_emergency:main",
+            "resume=dr.srv_resume:main"
         ],
     },
 )
