@@ -11,6 +11,7 @@ from dr_interfaces.srv import Resume,EmergencyStop
 from dr_interfaces.action import MoveTo
 from rclpy.action import ActionServer
 import asyncio
+import time
 
 
 
@@ -55,7 +56,7 @@ class RobotController(Node):
         response.message = "Resume command accpeted"
         return response
 
-    async def execute_callback(self, goal_handle):
+    def execute_callback(self, goal_handle):
         self.get_logger().info("Received MoveTo goal")
         self.target_x = goal_handle.request.target_x
         self.target_y = goal_handle.request.target_y
@@ -79,7 +80,7 @@ class RobotController(Node):
                 self.target_y = self.current_y
                 break
 
-            await asyncio.sleep(0.1)
+            time.sleep(0.1)
         goal_handle.succeed()
         result = MoveTo.Result()
         result.success = True
@@ -108,6 +109,8 @@ class RobotController(Node):
         diff_distance = math.sqrt(dx**2 + dy**2)
         # atan -> ratio: estimate angle(1,1 = -1,-1), atan2 -> coordinate : 360 degree
         diff_angle = self.normalize_angle(math.atan2(dy, dx) - self.current_yaw)
+        if diff_distance < 0.1 :
+           return 0.0, 0.0
         # knowing object in minimum distance is enough 
         min_dist = min(self.obj_list) if self.obj_list else float('inf')
         if min_dist < 0.5 :
@@ -115,9 +118,9 @@ class RobotController(Node):
         else :
             if abs(diff_angle) > 0.2:
                 x=0.0
-                theta = diff_angle
+                theta = diff_angle * 0.5
             else :
-                x,theta = diff_distance, diff_angle
+                x,theta = diff_distance, diff_angle * 0.5
 
         return min(x,0.2), max(min(theta,1.0),-1.0) # limit speed
     

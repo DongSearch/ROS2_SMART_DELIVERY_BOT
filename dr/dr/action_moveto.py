@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from dr_interfaces.action import MoveTo
 from rclpy.action import ActionClient
-
+import threading
 
 class MoveToAction(Node):
     def __init__(self) :
@@ -11,11 +11,21 @@ class MoveToAction(Node):
         while not self.cli_moveto.wait_for_server(timeout_sec=1.0):
             self.get_logger().info("Waiting for Service")
         
-        self.send_goal()
+        self.current_goal_handle = None
        
+    def input_thread(self):
+        while True :
+            try :
+                tx, ty = map(float,input("set X, Y posiiton ").split())
+                self.send_goal(tx,ty)
+            except :
+                print("invalid input")
         
-    def send_goal(self) :
-        tx, ty = map(float,input("set X, Y posiiton ").split())
+    def send_goal(self,tx,ty) :
+        if self.current_goal_handle is not None :
+            self.get_logger().info("Cancel previous goal")
+            self.current_goal_handle.cancel_goal_async()
+
         self.get_logger().info(f"x : {tx} | y : {ty}")
         goal = MoveTo.Goal()
         goal.target_x = tx
@@ -24,10 +34,12 @@ class MoveToAction(Node):
         goal_future.add_done_callback(self.goal_response_callback)
     
     def goal_response_callback(self,future):
+
         goal_handle = future.result()
         if not goal_handle.accepted:
             self.get_logger().warn("Goal Rejected")
             return
+        self.current_goal_handle = goal_handle
         
         self.get_logger().info("Goal Accepted")
         self.result_future = goal_handle.get_result_async()
@@ -47,6 +59,7 @@ class MoveToAction(Node):
 def main():
     rclpy.init()
     node = MoveToAction()
+    threading.Thread(target = node.input_thread, daemon=True).start()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()

@@ -22,3 +22,5 @@ Before that , I was thinking that service call request only once, so spin_once w
 
 5. asyncio.sleep vs time.sleep
 time.sleep freeze prgoress for certain time, while asyncio allow to do other task for waiting time(especially that is set with async)
+
+6. robot moves to destination, but they stil turn on same position
