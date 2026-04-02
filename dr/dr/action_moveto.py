@@ -15,7 +15,7 @@ class MoveToAction(Node):
        
         
     def send_goal(self) :
-        tx, ty = map(int,input("set X, Y posiiton ").split())
+        tx, ty = map(float,input("set X, Y posiiton ").split())
         self.get_logger().info(f"x : {tx} | y : {ty}")
         goal = MoveTo.Goal()
         goal.target_x = tx
@@ -35,7 +35,7 @@ class MoveToAction(Node):
 
     def feedback_callback(self,feedback_msg):
         feedback = feedback_msg.feedback
-        self.get_logger().info(f"remaining distance : {feedback.distance} m | current position ({feedback.current_x},{feedback.current_y})")
+        self.get_logger().info(f"remaining distance : {feedback.distance_remaining} m | current position ({feedback.current_x},{feedback.current_y})")
         self.get_logger().info(f"current state : {feedback.state}")
 
 
