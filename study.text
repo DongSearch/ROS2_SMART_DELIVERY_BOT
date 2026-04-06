@@ -24,3 +24,9 @@ Before that , I was thinking that service call request only once, so spin_once w
 time.sleep freeze prgoress for certain time, while asyncio allow to do other task for waiting time(especially that is set with async)
 
 6. robot moves to destination, but they stil turn on same position
+ -> when robot try to adjust angle, it moves a little bit,which induce to accumulate errors and make it keep turning. so force angle and linear velocity to 0 within certain value.
+ 
+7. asyncio and action server are not good combi
+- asyncio makes it return to result before goal reaches, so time is more reliable, and also Multithread already guarantee running programm parellely
+
+
