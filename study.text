@@ -29,4 +29,11 @@ time.sleep freeze prgoress for certain time, while asyncio allow to do other tas
 7. asyncio and action server are not good combi
 - asyncio makes it return to result before goal reaches, so time is more reliable, and also Multithread already guarantee running programm parellely
 
+8. ui_file = os.path.join(os.path.dirname(__file__),'..' ,'resource/robot_qt.ui') is not good way, because after build, their path might changed!
+so it recommends
+```
+from ament_index_python.packages import get_package_share_directory
 
+pkg_path = get_package_share_directory('my_rqt_plugin')
+ui_file = os.path.join(pkg_path, 'resource', 'robot_qt.ui')
+```
