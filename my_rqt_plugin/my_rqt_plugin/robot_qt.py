@@ -2,9 +2,9 @@ import os
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
-from qt_gui.plugin import Plugin
+from rqt_gui_py.plugin import Plugin
 from python_qt_binding import loadUi
-from python_qt_binding.QtWidgets import QWidget
+from python_qt_binding.QtWidgets import QMainWindow
 from PyQt5.QtCore import pyqtSignal, QObject
 from dr_interfaces.action import MoveTo
 from dr_interfaces.srv import Resume, EmergencyStop
@@ -20,14 +20,15 @@ class Bridge(QObject):
 class ControlPlugin(Plugin):
     def __init__(self,context):
         super().__init__(context)
-        self.setObjectName("ControlPlugin")
-        self.widget = QWidget()
+        self.setObjectName("robot_qt")
+        self.widget = QMainWindow()
         pkg_path = get_package_share_directory('my_rqt_plugin')
-        ui_file = os.path.join(pkg_path,'resource','resource/robot_qt.ui')
+        ui_file = os.path.join(pkg_path,'resource/robot_qt.ui')
         loadUi(ui_file,self.widget)
         context.add_widget(self.widget)
         self.bridge = Bridge()
-        rclpy.init()
+        if not rclpy.ok():
+            rclpy.init()
         self.node = ControlNode(self.bridge)
         self.initial_distance = None
         self.target_x = None
@@ -40,11 +41,7 @@ class ControlPlugin(Plugin):
         # self.widget.rbn_pre.clicked.connect(self.node.send_addition)
         # self.widget.rbn_du.clicked.connect(self.node.send_addition)
         # self.widget.rbn_qu.clicked.connect(self.node.send_addition)
-        self.widget.qt_plot.setXRange(0, 100)
-        self.widget.qt_plot.setYRange(0, 100)
-        self.widget.qt_plot.setLabel('left', 'Y')
-        self.widget.qt_plot.setLabel('bottom', 'X')
-        self.widget.qt_plot.showGrid(x=True, y=True)
+
         self.bridge.log_signal.connect(self.update_log)
 
         threading.Thread(target=rclpy.spin,args=(self.node,), daemon=True).start()
@@ -86,7 +83,7 @@ class ControlNode(Node):
         # Action Client
         self.action_client = ActionClient(self, MoveTo,"moveto")
         self.cli_resume = self.create_client(Resume,'resume')
-        self.cli_emr = self.create_client(EmergencyStop,'emergency')
+        self.cli_emr = self.create_client(EmergencyStop,'emg_stop')
         self.current_goal_handle = None
 
     def send_goal(self,x,y):

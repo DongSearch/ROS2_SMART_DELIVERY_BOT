@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'my_rqt_plugin'
 
@@ -10,6 +12,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share',package_name, 'resource'), glob('resource/*.ui')),
+        (os.path.join('share', package_name),['plugin.xml'])
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -25,5 +29,8 @@ setup(
     entry_points={
         'console_scripts': [
         ],
+        'rqt_gui_py.plugin' : [
+            'robot_qt = my_rqt_plugin.robot_qt:ControlPlugin'
+        ]
     },
 )

@@ -291,21 +291,11 @@
      <string>Resume</string>
     </property>
    </widget>
-   <widget class="QwtPlot" name="qt_plot">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>440</y>
-      <width>651</width>
-      <height>200</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QTextBrowser" name="tb_error">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>70</y>
+      <x>70</x>
+      <y>460</y>
       <width>321</width>
       <height>221</height>
      </rect>
@@ -314,8 +304,8 @@
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>30</y>
+      <x>170</x>
+      <y>430</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -359,13 +349,6 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QwtPlot</class>
-   <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

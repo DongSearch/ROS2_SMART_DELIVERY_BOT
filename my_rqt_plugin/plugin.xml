@@ -1,0 +1,17 @@
+<library path="src">
+  <class name="robot_qt" type="my_rqt_plugin.robot_qt.ControlPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      A plugin visualizing messages and services values
+    </description>
+    <qtgui>
+      <group>
+        <label>MyVisualization</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to visualization</statustip>
+      </group>
+      <label>MyViewer</label>
+      <icon type="theme">utilities-system-monitor</icon>
+      <statustip>A plugin visualizing messages and services values</statustip>
+    </qtgui>
+  </class>
+</library>

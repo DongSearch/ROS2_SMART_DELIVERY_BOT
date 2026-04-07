@@ -18,5 +18,6 @@
 
   <export>
     <build_type>ament_python</build_type>
+    <rqt_gui plugin="${prefix}/plugin.xml"/>
   </export>
 </package>
